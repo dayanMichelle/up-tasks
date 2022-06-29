@@ -6,7 +6,7 @@ const registrar = async (req,res) => {
     const { email } = req.body
     const existeUsuario = await Usuario.findOne({email})
     if(existeUsuario){
-        const error = new Error('El usuario ya está registrado')
+        const error = new Error('El usuario ya está registrado ❌')
         return res.status(400).json({
             msg: error.message
         })
@@ -18,11 +18,37 @@ const registrar = async (req,res) => {
         usuario.token = generarId()
         await usuario.save()
         res.json({
-            msg: 'Usuario registrado correctamente'
+            msg: 'Usuario registrado correctamente. Revisa tu email para confirmar la cuenta ✨'
         })
+        //TODO: enviar token al email del usuario
     } catch (error) {
         console.log(error)
     }
 }
 
-export {registrar}
+
+const confirmar = async (req,res) => {
+    const { token } = req.params
+    const usuarioConfirmado = await Usuario.findOne({token})
+    if(!usuarioConfirmado){
+        const error = new Error('Token no válido ⚠️')
+        res.status(403).json({
+            msg: error.message
+        })
+    }
+    try {
+        usuarioConfirmado.confirmado = true
+        usuarioConfirmado.token = ''
+        await usuarioConfirmado.save()
+        res.json({
+            msg: 'Confirmado 💜'
+        })
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+export {
+    registrar,
+    confirmar
+}
