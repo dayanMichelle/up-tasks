@@ -5,7 +5,7 @@ export const emailRegistro = async ({email,nombre,token}) => {
         host: process.env.HOST,
         port: process.env.PORT,
         auth: {
-          user: process.env.USER,
+          user: process.env.EMAIL_USER,
           pass: process.env.PASS
         }
       });
@@ -20,15 +20,15 @@ export const emailRegistro = async ({email,nombre,token}) => {
         <p>Tu cuenta ya está lista. Solo debes comprobarla con el siguiente enlace: <a href="${process.env.URL}/confirmar/${token}">Comprobar cuenta ✨</a></p>
         <p>Si no creaste una cuenta, puedes ignorar este mensaje.</p>
         `
+    })    
 
-    })
 }
 export const emailRecuperar = async ({email,nombre,token}) => {
     const transport = nodemailer.createTransport({
         host: process.env.HOST,
         port: process.env.PORT,
         auth: {
-          user: process.env.USER,
+          user: process.env.EMAIL_USER,
           pass: process.env.PASS
         }
       });
