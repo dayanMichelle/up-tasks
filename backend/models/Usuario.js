@@ -31,10 +31,14 @@ const usuarioSchema = mongoose.Schema(
 );
 
 usuarioSchema.pre('save',async function (next) {
-    if(!this.isModified(this.password)) next()
+    if(!this.isModified("password")) next()
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
 })
+
+usuarioSchema.methods.comprobarPassword =  async function (password) {
+    return await bcrypt.compare(password,this.password)
+}
 
 const Usuario = mongoose.model('Usuario', usuarioSchema)
 export default Usuario
