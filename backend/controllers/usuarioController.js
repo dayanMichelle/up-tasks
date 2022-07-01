@@ -103,4 +103,17 @@ const olvidePassword = async (req, res) => {
   }
 };
 
-export { registrar, confirmar, autenticar, olvidePassword };
+const comprobarToken = async (req,res) => {
+    const {token} = req.params
+    const usuario = await Usuario.findOne({token})
+    if(!usuario){
+        const error = new Error('Token no válido ❌')
+        res.status(403).json({
+            msg: error.message
+        })
+    }
+    res.json({
+        msg: 'Token válido 🙆‍♀️'
+    })
+}
+export { registrar, confirmar, autenticar, olvidePassword, comprobarToken };
