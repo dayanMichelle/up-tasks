@@ -1,3 +1,4 @@
+import { emailRegistro, emailRecuperar} from "../helpers/emai.js";
 import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
 import Usuario from "../models/Usuario.js";
@@ -18,6 +19,8 @@ const registrar = async (req, res) => {
     console.log(usuario);
     usuario.token = generarId();
     await usuario.save();
+    //mando correo
+    emailRegistro({nombre: usuario.nombre, email: usuario.email , token: usuario.token})
     res.json({
       msg: "Usuario registrado correctamente. Revisa tu email para confirmar la cuenta ✨",
     });
@@ -91,6 +94,7 @@ const olvidePassword = async (req, res) => {
   try {
     usuario.token = generarId();
     await usuario.save();
+    emailRecuperar({nombre: usuario.nombre, email: usuario.email , token: usuario.token})
     res.json({
         msg: 'Hemos enviado un correo para restablecer su contraseña 💫'
     })
